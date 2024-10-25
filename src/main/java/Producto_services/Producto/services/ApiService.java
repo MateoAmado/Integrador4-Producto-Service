@@ -20,6 +20,7 @@ public class ApiService {
 
     public ResponseEntity<UsuarioDTO> registro(UsuarioDTO usuarioDTO){
         ResponseEntity<UsuarioDTO> response = rest_template.postForEntity(base_url + "/registro", usuarioDTO, UsuarioDTO.class);
+
         return response;
     }
 
@@ -32,4 +33,8 @@ public class ApiService {
         this.rest_template.delete(this.base_url + "/" + id);
     }
 
+    public String login(UsuarioDTO usuarioDTO) {
+        String response = rest_template.postForObject(base_url + "/login", usuarioDTO, String.class);
+        return response;
+    }
 }

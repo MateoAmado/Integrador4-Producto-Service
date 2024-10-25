@@ -43,13 +43,19 @@ public class ProductoController {
         if(p!=null){
             return new ResponseEntity<>(p, HttpStatus.CREATED);
         }
-        return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+        return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
     }
 
     @PostMapping("/registro")
     public ResponseEntity<UsuarioDTO> registro(@RequestBody UsuarioDTO usuarioDTO){
         ResponseEntity<UsuarioDTO> usuario=apiService.registro(usuarioDTO);
         return new ResponseEntity<>(usuario.getBody(), usuario.getStatusCode());
+    }
+
+    @PostMapping("/login")
+    public String login(@RequestBody UsuarioDTO usuarioDTO){
+       String token=apiService.login(usuarioDTO);
+        return token;
     }
 
     @PutMapping("/{id}")
@@ -67,6 +73,6 @@ public class ProductoController {
         if(p!=null){
             return new ResponseEntity<>(p, HttpStatus.OK);
         }
-        return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+        return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
     }
 }
