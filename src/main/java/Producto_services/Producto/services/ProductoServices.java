@@ -26,16 +26,13 @@ public class ProductoServices {
     }
 
     public Producto updateProducto(Long id, Producto producto) {
-        if(id==producto.getId()) {
             Producto p=productoRepository.getById(id);
             if(p!=null) {
-                p.setId(producto.getId());
                 p.setNombre(producto.getNombre());
                 p.setValor(producto.getValor());
                 p.setCantidad_stock(producto.getCantidad_stock());
                 return productoRepository.save(p);
             }
-        }
         return null;
     }
 
