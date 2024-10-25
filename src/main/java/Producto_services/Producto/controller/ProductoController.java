@@ -1,6 +1,7 @@
 package Producto_services.Producto.controller;
 
 
+import Producto_services.Producto.DTO.ProductoDTO;
 import Producto_services.Producto.DTO.UsuarioDTO;
 import Producto_services.Producto.model.Producto;
 import Producto_services.Producto.services.ApiService;
@@ -23,8 +24,8 @@ public class ProductoController {
     private ApiService apiService;
 
     @GetMapping
-    public ResponseEntity<List<Producto>> getProductos(){
-        List<Producto> productos=productoServices.getProductos();
+    public ResponseEntity<List<ProductoDTO>> getProductos(){
+        List<ProductoDTO> productos=productoServices.getProductos();
         return new ResponseEntity<>(productos, HttpStatus.OK);
     }
 
@@ -37,6 +38,12 @@ public class ProductoController {
         return new ResponseEntity<>(p, HttpStatus.NOT_FOUND);
     }
 
+    @GetMapping("/productoMasVendido")
+    public ResponseEntity<Producto> productoMasVendido(){
+        Producto p=apiService.productoMasVendido();
+        return new ResponseEntity<>(p, HttpStatus.OK);
+    }
+
     @PostMapping
     public ResponseEntity<Producto> addProducto(@RequestBody Producto producto){
         Producto p=productoServices.save(producto);
@@ -44,18 +51,6 @@ public class ProductoController {
             return new ResponseEntity<>(p, HttpStatus.CREATED);
         }
         return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
-    }
-
-    @PostMapping("/registro")
-    public ResponseEntity<UsuarioDTO> registro(@RequestBody UsuarioDTO usuarioDTO){
-        ResponseEntity<UsuarioDTO> usuario=apiService.registro(usuarioDTO);
-        return new ResponseEntity<>(usuario.getBody(), usuario.getStatusCode());
-    }
-
-    @PostMapping("/login")
-    public String login(@RequestBody UsuarioDTO usuarioDTO){
-       String token=apiService.login(usuarioDTO);
-        return token;
     }
 
     @PutMapping("/{id}")

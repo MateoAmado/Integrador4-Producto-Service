@@ -1,5 +1,6 @@
 package Producto_services.Producto.services;
 
+import Producto_services.Producto.DTO.ProductoDTO;
 import Producto_services.Producto.model.Producto;
 import Producto_services.Producto.repository.ProductoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,7 +14,7 @@ public class ProductoServices {
     @Autowired
     private ProductoRepository productoRepository;
 
-    public List<Producto> getProductos() {
+    public List<ProductoDTO> getProductos() {
         return productoRepository.getProductos();
     }
 
