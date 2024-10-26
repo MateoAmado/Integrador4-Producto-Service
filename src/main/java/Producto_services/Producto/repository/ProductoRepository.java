@@ -14,6 +14,6 @@ public interface ProductoRepository extends JpaRepository<Producto, Long> {
     @Query("SELECT new Producto_services.Producto.DTO.ProductoDTO(p.id,p.nombre,p.cantidad_stock, p.valor) FROM Producto p")
     List<ProductoDTO> getProductos();
 
-    @Query("SELECT new Producto_services.Producto.DTO.ProductoDTO(p.id,p.nombre,p.cantidad_stock, p.valor) FROM Producto p WHERE p.id=:id")
+    @Query("SELECT p FROM Producto p WHERE p.id=:id")
     Producto getById(Long id);
 }
