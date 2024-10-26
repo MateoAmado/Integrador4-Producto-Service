@@ -1,8 +1,9 @@
 package Producto_services.Producto.services;
 
-import Producto_services.Producto.DTO.ProductoDTO;
-import Producto_services.Producto.DTO.UsuarioDTO;
 import Producto_services.Producto.model.Producto;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
@@ -12,10 +13,6 @@ import org.springframework.web.client.RestTemplate;
 
 @Service
 public class ApiService {
-    // Reemplaza con la URL de tu API
-
-    @Autowired
-    private ProductoServices productoServices;
 
     @Value("http://localhost:8090/auth")
     private String base_url;
@@ -26,32 +23,25 @@ public class ApiService {
     @Value("http://localhost:8026")
     private String APICompras;
 
+    @Value("https://dolarapi.com/v1/dolares/oficial")
+    private String APIDolar;
+
     @Autowired
     private RestTemplate rest_template;
 
-    public ResponseEntity<UsuarioDTO> registro(UsuarioDTO usuarioDTO){
-        ResponseEntity<UsuarioDTO> response = rest_template.postForEntity(base_url + "/registro", usuarioDTO, UsuarioDTO.class);
 
+    public Long valorDolarOficial() throws JsonProcessingException {
+        String jsonResponse = rest_template.getForObject(APIDolar, String.class);
+        ObjectMapper mapper = new ObjectMapper();
+        JsonNode rootNode = mapper.readTree(jsonResponse);
+        Long response = rootNode.path("venta").asLong();
         return response;
     }
 
-    public Producto productoMasVendido(){
+    public Long productoMasVendido(){
         ResponseEntity<Long> response = rest_template.getForEntity(APICompras+"/productoMasVendido", Long.class);
         Long idUser= response.getBody();
-        Producto producto=productoServices.getById(idUser);
-        return producto;
-    }
-    public ResponseEntity<String> get() {
-        return this.rest_template.getForEntity(this.base_url, String.class);
+        return idUser;
     }
 
-
-    public void delete(Long id) {
-        this.rest_template.delete(this.base_url + "/" + id);
-    }
-
-    public String login(UsuarioDTO usuarioDTO) {
-        String response = rest_template.postForObject(base_url + "/login", usuarioDTO, String.class);
-        return response;
-    }
 }

@@ -2,7 +2,6 @@ package Producto_services.Producto.controller;
 
 
 import Producto_services.Producto.DTO.ProductoDTO;
-import Producto_services.Producto.DTO.UsuarioDTO;
 import Producto_services.Producto.model.Producto;
 import Producto_services.Producto.services.ApiService;
 import Producto_services.Producto.services.ProductoServices;
@@ -63,7 +62,7 @@ public class ProductoController {
     })
     @GetMapping("/productoMasVendido")
     public ResponseEntity<Producto> productoMasVendido(){
-        Producto p=apiService.productoMasVendido();
+        Producto p=productoServices.productoMasVendido();
         if(p!=null){
             return new ResponseEntity<>(p, HttpStatus.OK);
         }
