@@ -22,16 +22,20 @@ public class Producto {
     private int cantidad_stock;
 
     @Column
-    private float valor;
+    private float valorEnPesos;
+
+    @Column
+    private float valorEnDolares;
 
 
     public Producto() {}
 
 
-    public Producto(Long id, String nombre, int cantidadStock, float valor) {
+    public Producto(Long id, String nombre, int cantidadStock, float valorEnPesos, float valorEnDolares) {
         this.id = id;
         this.nombre = nombre;
         this.cantidad_stock = cantidadStock;
-        this.valor = valor;
+        this.valorEnPesos = valorEnPesos;
+        this.valorEnDolares = valorEnDolares;
     }
 }

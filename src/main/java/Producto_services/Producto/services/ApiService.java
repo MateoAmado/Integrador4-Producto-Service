@@ -14,15 +14,6 @@ import org.springframework.web.client.RestTemplate;
 @Service
 public class ApiService {
 
-    @Value("http://localhost:8090/auth")
-    private String base_url;
-
-    @Value("http://localhost:8010/clientes")
-    private String APICliente;
-
-    @Value("http://localhost:8026")
-    private String APICompras;
-
     @Value("https://dolarapi.com/v1/dolares/oficial")
     private String APIDolar;
 
@@ -38,10 +29,5 @@ public class ApiService {
         return response;
     }
 
-    public Long productoMasVendido(){
-        ResponseEntity<Long> response = rest_template.getForEntity(APICompras+"/productoMasVendido", Long.class);
-        Long idUser= response.getBody();
-        return idUser;
-    }
 
 }

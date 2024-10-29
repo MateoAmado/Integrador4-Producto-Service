@@ -3,6 +3,7 @@ package Producto_services.Producto.services;
 import Producto_services.Producto.DTO.ProductoDTO;
 import Producto_services.Producto.model.Producto;
 import Producto_services.Producto.repository.ProductoRepository;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -22,11 +23,12 @@ public class ProductoServices {
         return productoRepository.getProductos();
     }
 
-    @SneakyThrows //Anotación de Lombok para manejar excepciones (no usar para excepciones que se deben manejar explicitamente)
+    @SneakyThrows
     public Producto save(Producto producto) {
         Long valorDolar= apiService.valorDolarOficial();
-        float nuevoValor= producto.getValor()+valorDolar;
-        producto.setValor(nuevoValor);
+        float nuevoValor= producto.getValorEnDolares()*valorDolar;
+        System.out.println(producto.getValorEnDolares());
+        producto.setValorEnPesos(nuevoValor);
         Producto p = productoRepository.save(producto);
         if(p!=null) {
             return p;
@@ -39,12 +41,10 @@ public class ProductoServices {
             Producto p=productoRepository.getById(id);
             if(p!=null) {
                 p.setNombre(producto.getNombre());
-                System.out.println(p.getValor());
-                System.out.println(producto.getValor());
-                if(producto.getValor()!=p.getValor()) {
+                if(producto.getValorEnDolares()!=p.getValorEnDolares()) {
                     Long valorDolar= apiService.valorDolarOficial();
-                    float nuevoValor= producto.getValor()+valorDolar;
-                    p.setValor(nuevoValor);
+                    float nuevoValor= producto.getValorEnDolares()*valorDolar;
+                    p.setValorEnPesos(nuevoValor);
                 }
                 p.setCantidad_stock(producto.getCantidad_stock());
                 return productoRepository.save(p);
@@ -65,9 +65,17 @@ public class ProductoServices {
         return productoRepository.getById(id);
     }
 
-    public Producto productoMasVendido() {
-        Long id= apiService.productoMasVendido();
-        Producto producto=productoRepository.getById(id);
-        return producto;
+    @SneakyThrows
+    public List<ProductoDTO> actualizarPrecio() {
+        Long valorDolar= apiService.valorDolarOficial();
+        List<ProductoDTO> productos=productoRepository.getProductos();
+        for(ProductoDTO productoDTO:productos) {
+            float precioDolar = productoDTO.getValorEnDolares();
+            float nuevoValor = precioDolar * valorDolar;
+            productoDTO.setValorEnPesos(nuevoValor);
+            Producto p=new Producto(productoDTO.getId(), productoDTO.getNombre(), productoDTO.getCantidad_stock(), productoDTO.getValorEnPesos(),productoDTO.getValorEnDolares());
+            productoRepository.save(p);
+        }
+    return productos;
     }
 }

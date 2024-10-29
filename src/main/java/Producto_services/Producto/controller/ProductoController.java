@@ -55,19 +55,6 @@ public class ProductoController {
         return new ResponseEntity<>(p, HttpStatus.NOT_FOUND);
     }
 
-    @Operation(summary = "Obtener producto más vendido", description = "Devuelve el producto más vendido entre todos")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Producto obtenido con éxito"),
-            @ApiResponse(responseCode = "404", description = "No existe un producto que sea más vendido")
-    })
-    @GetMapping("/productoMasVendido")
-    public ResponseEntity<Producto> productoMasVendido(){
-        Producto p=productoServices.productoMasVendido();
-        if(p!=null){
-            return new ResponseEntity<>(p, HttpStatus.OK);
-        }
-        return new ResponseEntity<>(p, HttpStatus.NOT_FOUND);
-    }
 
     @Operation(summary = "Agregar un nuevo producto", description = "Agrega un nuevo producto")
     @ApiResponses(value = {
@@ -83,6 +70,14 @@ public class ProductoController {
         return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
     }
 
+    @GetMapping("/actualizarPrecios")
+    public ResponseEntity<List<ProductoDTO>> updateProducto(){
+        List<ProductoDTO> productos=productoServices.actualizarPrecio();
+        if(!productos.isEmpty()){
+            return new ResponseEntity<>(productos, HttpStatus.OK);
+        }
+        return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+    }
     @Operation(summary = "Modificar información del producto ", description = "Modifica información sobre un producto ya existente")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Producto modificado con éxito"),
